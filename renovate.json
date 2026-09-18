@@ -1,0 +1,39 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Standalone manual maintenance policy for the shared Renovate policy repository.",
+  "extends": ["config:best-practices"],
+  "automerge": false,
+  "platformAutomerge": false,
+  "minimumReleaseAge": "14 days",
+  "minimumReleaseAgeBehaviour": "timestamp-optional",
+  "ignoreTests": false,
+  "internalChecksAsSuccess": false,
+  "automergeType": "pr",
+  "automergeStrategy": "squash",
+  "rebaseWhen": "behind-base-branch",
+  "prConcurrentLimit": 1,
+  "branchConcurrentLimit": 1,
+  "osvVulnerabilityAlerts": true,
+  "separateMajorMinor": false,
+  "separateMinorPatch": false,
+  "lockFileMaintenance": {
+    "enabled": false
+  },
+  "vulnerabilityAlerts": {
+    "automerge": false,
+    "minimumReleaseAge": "3 days",
+    "groupName": "Renovate policy dependencies",
+    "groupSlug": "renovate-policy-dependencies"
+  },
+  "packageRules": [
+    {
+      "description": "Keep the policy repository's dependency maintenance in one manually merged PR.",
+      "matchPackageNames": ["*"],
+      "matchUpdateTypes": ["major", "minor", "patch", "pin", "pinDigest", "digest", "rollback", "replacement", "bump", "lockfileUpdate"],
+      "groupName": "Renovate policy dependencies",
+      "groupSlug": "renovate-policy-dependencies",
+      "automerge": false,
+      "recreateWhen": "always"
+    }
+  ]
+}

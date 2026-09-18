@@ -11,7 +11,8 @@
   "vulnerabilityAlerts": {
     "automerge": false,
     "minimumReleaseAge": "3 days",
-    "prConcurrentLimit": 1
+    "groupName": "All dependency updates",
+    "groupSlug": "all-dependency-updates"
   },
   "packageRules": [
     {

@@ -18,4 +18,7 @@ Private repositories use the single rolling, manually merged policy:
 ```
 
 Every preset is validated strictly in CI. Policy changes are maintained by the repository
-administrators.
+administrators. The manual preset groups ordinary dependency work and security fixes under one
+stable group name and always requires a human merge. Renovate security-alert PRs are a documented
+platform exception: Renovate gives them priority over its ordinary concurrency limit, so the
+one-PR cap applies to normal dependency updates while security fixes remain grouped and manual.

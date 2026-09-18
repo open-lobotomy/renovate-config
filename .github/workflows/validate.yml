@@ -22,8 +22,8 @@ jobs:
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: 24.x
-      - name: Validate published presets
-        run: docker run --rm --mount type=bind,source="$GITHUB_WORKSPACE",target=/repo,readonly --workdir /repo --entrypoint renovate-config-validator renovate/renovate@sha256:255f98c1c8da761deb006d70cd2e864c9b3f35c474c95b1bd19753ca8962667d --strict --no-global default.json manual.json
+      - name: Validate published presets and repository policy
+        run: docker run --rm --mount type=bind,source="$GITHUB_WORKSPACE",target=/repo,readonly --workdir /repo --entrypoint renovate-config-validator renovate/renovate@sha256:255f98c1c8da761deb006d70cd2e864c9b3f35c474c95b1bd19753ca8962667d --strict --no-global default.json manual.json renovate.json
       - name: Run policy behavior tests
         run: node --test test/renovate-policy.test.mjs
       - name: Lint workflow syntax

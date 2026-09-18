@@ -10,6 +10,7 @@ test("public preset keeps age-qualified automerge guarded by CI", async () => {
   const preset = await readJson("default.json");
 
   assert.deepEqual(preset.extends, ["config:best-practices"]);
+  assert.equal(preset.automerge, false);
   assert.equal(preset.minimumReleaseAge, "14 days");
   assert.equal(preset.minimumReleaseAgeBehaviour, "timestamp-optional");
   assert.equal(preset.internalChecksFilter, "strict");
@@ -49,12 +50,37 @@ test("manual preset disables every automerge path and maintains one rolling PR",
   assert.equal(preset.separateMinorPatch, false);
   assert.equal(preset.vulnerabilityAlerts.automerge, false);
   assert.equal(preset.vulnerabilityAlerts.minimumReleaseAge, "3 days");
-  assert.equal(preset.vulnerabilityAlerts.prConcurrentLimit, 1);
+  assert.equal(preset.vulnerabilityAlerts.groupName, "All dependency updates");
+  assert.equal(preset.vulnerabilityAlerts.groupSlug, "all-dependency-updates");
 
   const rollingRule = preset.packageRules.find((rule) => rule.groupSlug === "all-dependency-updates");
   assert.ok(rollingRule);
   assert.equal(rollingRule.automerge, false);
   assert.equal(rollingRule.recreateWhen, "always");
-  assert.ok(rollingRule.matchUpdateTypes.includes("major"));
-  assert.ok(rollingRule.matchUpdateTypes.includes("digest"));
+  assert.deepEqual(
+    new Set(rollingRule.matchUpdateTypes),
+    new Set([
+      "major",
+      "minor",
+      "patch",
+      "pin",
+      "pinDigest",
+      "digest",
+      "rollback",
+      "replacement",
+      "bump",
+      "lockfileUpdate",
+    ]),
+  );
+
+  const repositoryPolicy = await readJson("renovate.json");
+  assert.equal(repositoryPolicy.automerge, false);
+  assert.equal(repositoryPolicy.platformAutomerge, false);
+  assert.equal(repositoryPolicy.minimumReleaseAge, "14 days");
+  assert.equal(repositoryPolicy.minimumReleaseAgeBehaviour, "timestamp-optional");
+  assert.equal(repositoryPolicy.prConcurrentLimit, 1);
+  assert.equal(repositoryPolicy.branchConcurrentLimit, 1);
+  assert.equal(repositoryPolicy.osvVulnerabilityAlerts, true);
+  assert.equal(repositoryPolicy.vulnerabilityAlerts.automerge, false);
+  assert.equal(repositoryPolicy.vulnerabilityAlerts.groupSlug, "renovate-policy-dependencies");
 });
