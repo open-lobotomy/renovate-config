@@ -23,4 +23,5 @@ cooldown when CI passes; the manual preset overrides that setting and always req
 merge. The manual preset groups security fixes under a stable group name. Renovate security-alert
 PRs are a documented platform exception: Renovate gives them priority over its ordinary
 concurrency limit, so the manual preset's one-PR cap applies to normal dependency updates while
-security fixes remain grouped and manual.
+security fixes remain grouped and manual. Replacement updates remain manual but separate because
+Renovate does not group replacement updates.

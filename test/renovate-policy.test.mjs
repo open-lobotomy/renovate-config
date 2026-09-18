@@ -28,6 +28,12 @@ test("public preset keeps age-qualified automerge guarded by CI", async () => {
   assert.equal(manualRule.automerge, false);
   assert.equal(manualRule.groupSlug, "manual-dependency-maintenance");
 
+  const replacementRule = preset.packageRules.find((rule) => rule.matchUpdateTypes?.includes("replacement"));
+  assert.ok(replacementRule);
+  assert.equal(replacementRule.groupName, null);
+  assert.equal(replacementRule.groupSlug, null);
+  assert.equal(replacementRule.automerge, false);
+
   const missingAgeRule = preset.packageRules.find((rule) => rule.matchJsonata?.some((expression) => expression.includes("releaseTimestamp")));
   assert.ok(missingAgeRule);
   assert.equal(missingAgeRule.automerge, false);
@@ -70,11 +76,15 @@ test("manual preset disables every automerge path and maintains one rolling PR",
       "pinDigest",
       "digest",
       "rollback",
-      "replacement",
       "bump",
-      "lockfileUpdate",
     ]),
   );
+
+  const replacementRule = preset.packageRules.find((rule) => rule.matchUpdateTypes?.includes("replacement"));
+  assert.ok(replacementRule);
+  assert.equal(replacementRule.groupName, null);
+  assert.equal(replacementRule.groupSlug, null);
+  assert.equal(replacementRule.automerge, false);
 
   const repositoryPolicy = await readJson("renovate.json");
   assert.equal(repositoryPolicy.automerge, false);
@@ -86,4 +96,10 @@ test("manual preset disables every automerge path and maintains one rolling PR",
   assert.equal(repositoryPolicy.osvVulnerabilityAlerts, true);
   assert.equal(repositoryPolicy.vulnerabilityAlerts.automerge, false);
   assert.equal(repositoryPolicy.vulnerabilityAlerts.groupSlug, "renovate-policy-dependencies");
+
+  const repositoryReplacementRule = repositoryPolicy.packageRules.find((rule) => rule.matchUpdateTypes?.includes("replacement"));
+  assert.ok(repositoryReplacementRule);
+  assert.equal(repositoryReplacementRule.groupName, null);
+  assert.equal(repositoryReplacementRule.groupSlug, null);
+  assert.equal(repositoryReplacementRule.automerge, false);
 });

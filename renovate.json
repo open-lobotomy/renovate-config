@@ -29,9 +29,18 @@
     {
       "description": "Keep the policy repository's dependency maintenance in one manually merged PR.",
       "matchPackageNames": ["*"],
-      "matchUpdateTypes": ["major", "minor", "patch", "pin", "pinDigest", "digest", "rollback", "replacement", "bump", "lockfileUpdate"],
+      "matchUpdateTypes": ["major", "minor", "patch", "pin", "pinDigest", "digest", "rollback", "bump"],
       "groupName": "Renovate policy dependencies",
       "groupSlug": "renovate-policy-dependencies",
+      "automerge": false,
+      "recreateWhen": "always"
+    },
+    {
+      "description": "Replacement updates remain manual; Renovate does not group replacement updates.",
+      "matchPackageNames": ["*"],
+      "matchUpdateTypes": ["replacement"],
+      "groupName": null,
+      "groupSlug": null,
       "automerge": false,
       "recreateWhen": "always"
     }

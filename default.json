@@ -26,9 +26,18 @@
     {
       "description": "Keep update types without a reliable release-age check in the manual maintenance PR.",
       "matchPackageNames": ["*"],
-      "matchUpdateTypes": ["pin", "pinDigest", "digest", "rollback", "replacement", "bump", "lockfileUpdate"],
+      "matchUpdateTypes": ["pin", "pinDigest", "digest", "rollback", "bump"],
       "groupName": "Manual dependency maintenance",
       "groupSlug": "manual-dependency-maintenance",
+      "automerge": false,
+      "recreateWhen": "always"
+    },
+    {
+      "description": "Replacement updates remain manual; Renovate does not group replacement updates.",
+      "matchPackageNames": ["*"],
+      "matchUpdateTypes": ["replacement"],
+      "groupName": null,
+      "groupSlug": null,
       "automerge": false,
       "recreateWhen": "always"
     },

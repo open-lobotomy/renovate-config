@@ -18,9 +18,18 @@
     {
       "description": "Private repositories use one rolling dependency PR and always require a human merge.",
       "matchPackageNames": ["*"],
-      "matchUpdateTypes": ["major", "minor", "patch", "pin", "pinDigest", "digest", "rollback", "replacement", "bump", "lockfileUpdate"],
+      "matchUpdateTypes": ["major", "minor", "patch", "pin", "pinDigest", "digest", "rollback", "bump"],
       "groupName": "All dependency updates",
       "groupSlug": "all-dependency-updates",
+      "automerge": false,
+      "recreateWhen": "always"
+    },
+    {
+      "description": "Replacement updates remain manual; Renovate does not group replacement updates.",
+      "matchPackageNames": ["*"],
+      "matchUpdateTypes": ["replacement"],
+      "groupName": null,
+      "groupSlug": null,
       "automerge": false,
       "recreateWhen": "always"
     },
