@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: 24.x
       - name: Validate published presets
-        run: npm exec --yes --package=renovate@44.103.0 -- renovate-config-validator --strict --no-global default.json manual.json
+        run: docker run --rm --mount type=bind,source="$GITHUB_WORKSPACE",target=/repo,readonly --workdir /repo --entrypoint renovate-config-validator renovate/renovate@sha256:255f98c1c8da761deb006d70cd2e864c9b3f35c474c95b1bd19753ca8962667d --strict --no-global default.json manual.json
       - name: Run policy behavior tests
         run: node --test test/renovate-policy.test.mjs
       - name: Lint workflow syntax
