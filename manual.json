@@ -1,0 +1,36 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Open Lobotomy private-repository Renovate policy: keep all dependency work in one rolling PR for manual review.",
+  "extends": ["./default"],
+  "automerge": false,
+  "platformAutomerge": false,
+  "prConcurrentLimit": 1,
+  "branchConcurrentLimit": 1,
+  "separateMajorMinor": false,
+  "separateMinorPatch": false,
+  "vulnerabilityAlerts": {
+    "automerge": false,
+    "minimumReleaseAge": "3 days",
+    "prConcurrentLimit": 1
+  },
+  "packageRules": [
+    {
+      "description": "Private repositories use one rolling dependency PR and always require a human merge.",
+      "matchPackageNames": ["*"],
+      "matchUpdateTypes": ["major", "minor", "patch", "pin", "pinDigest", "digest", "rollback", "replacement", "bump", "lockfileUpdate"],
+      "groupName": "All dependency updates",
+      "groupSlug": "all-dependency-updates",
+      "automerge": false,
+      "recreateWhen": "always"
+    },
+    {
+      "description": "Keep any update without a release timestamp in the same manual rolling PR.",
+      "matchPackageNames": ["*"],
+      "matchJsonata": ["$not($exists(releaseTimestamp)) or $not($exists(newVersionAgeInDays))"],
+      "groupName": "All dependency updates",
+      "groupSlug": "all-dependency-updates",
+      "automerge": false,
+      "recreateWhen": "always"
+    }
+  ]
+}
