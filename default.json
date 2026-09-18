@@ -1,0 +1,62 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Open Lobotomy public-repository Renovate policy: age-qualified updates may automerge after CI, while unverifiable updates remain manual.",
+  "extends": ["config:best-practices"],
+  "automerge": false,
+  "minimumReleaseAge": "14 days",
+  "minimumReleaseAgeBehaviour": "timestamp-optional",
+  "internalChecksFilter": "strict",
+  "internalChecksAsSuccess": false,
+  "ignoreTests": false,
+  "automergeType": "pr",
+  "automergeStrategy": "squash",
+  "platformAutomerge": false,
+  "rebaseWhen": "behind-base-branch",
+  "prConcurrentLimit": 10,
+  "branchConcurrentLimit": 10,
+  "osvVulnerabilityAlerts": true,
+  "vulnerabilityAlerts": {
+    "automerge": true,
+    "minimumReleaseAge": "3 days"
+  },
+  "lockFileMaintenance": {
+    "enabled": false
+  },
+  "packageRules": [
+    {
+      "description": "Keep update types without a reliable release-age check in the manual maintenance PR.",
+      "matchPackageNames": ["*"],
+      "matchUpdateTypes": ["pin", "pinDigest", "digest", "rollback", "bump"],
+      "groupName": "Manual dependency maintenance",
+      "groupSlug": "manual-dependency-maintenance",
+      "automerge": false,
+      "recreateWhen": "always"
+    },
+    {
+      "description": "Replacement updates remain manual; Renovate does not group replacement updates.",
+      "matchPackageNames": ["*"],
+      "matchUpdateTypes": ["replacement"],
+      "groupName": null,
+      "groupSlug": null,
+      "automerge": false,
+      "recreateWhen": "always"
+    },
+    {
+      "description": "A version with no release timestamp may be proposed for review but must never automerge.",
+      "matchPackageNames": ["*"],
+      "matchUpdateTypes": ["major", "minor", "patch"],
+      "matchJsonata": ["$not($exists(releaseTimestamp)) or $not($exists(newVersionAgeInDays))"],
+      "groupName": "Manual dependency maintenance",
+      "groupSlug": "manual-dependency-maintenance",
+      "automerge": false,
+      "recreateWhen": "always"
+    },
+    {
+      "description": "Automerge only versioned updates whose release age has been measured and has passed the global fourteen-day cooldown.",
+      "matchPackageNames": ["*"],
+      "matchUpdateTypes": ["major", "minor", "patch"],
+      "matchJsonata": ["$exists(releaseTimestamp) and $exists(newVersionAgeInDays) and newVersionAgeInDays >= 14"],
+      "automerge": true
+    }
+  ]
+}

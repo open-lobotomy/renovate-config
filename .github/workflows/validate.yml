@@ -1,0 +1,30 @@
+name: Validate Renovate policy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate Renovate policy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out policy
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24.x
+      - name: Validate published presets and repository policy
+        run: docker run --rm --mount type=bind,source="$GITHUB_WORKSPACE",target=/repo,readonly --workdir /repo --entrypoint renovate-config-validator renovate/renovate@sha256:255f98c1c8da761deb006d70cd2e864c9b3f35c474c95b1bd19753ca8962667d --strict --no-global default.json manual.json renovate.json
+      - name: Run policy behavior tests
+        run: node --test test/renovate-policy.test.mjs
+      - name: Lint workflow syntax
+        run: docker run --rm --mount type=bind,source="$GITHUB_WORKSPACE",target=/repo,readonly rhysd/actionlint@sha256:9d36088643581e728c969f35141f88139fec77280b2be23c1f66f8e40e1025e7 /repo/.github/workflows/validate.yml
