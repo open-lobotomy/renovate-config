@@ -53,6 +53,9 @@ test("manual preset disables every automerge path and maintains one rolling PR",
   assert.equal(preset.vulnerabilityAlerts.groupName, "All dependency updates");
   assert.equal(preset.vulnerabilityAlerts.groupSlug, "all-dependency-updates");
 
+  const publicPreset = await readJson("default.json");
+  assert.equal(publicPreset.vulnerabilityAlerts.automerge, true);
+
   const rollingRule = preset.packageRules.find((rule) => rule.groupSlug === "all-dependency-updates");
   assert.ok(rollingRule);
   assert.equal(rollingRule.automerge, false);
